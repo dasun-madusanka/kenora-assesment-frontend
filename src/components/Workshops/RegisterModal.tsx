@@ -30,15 +30,30 @@ export const RegisterModal: React.FC<RegisterModalProps> = ({
     e.preventDefault()
     setError(null)
     setSuccessMsg(null)
+
+    const cleanName = attendeeName.trim()
+    const cleanEmail = attendeeEmail.trim().toLowerCase()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!cleanName || cleanName.length < 2) {
+      setError('Please provide a valid attendee name (at least 2 characters).')
+      return
+    }
+
+    if (!cleanEmail || !emailRegex.test(cleanEmail)) {
+      setError('Please provide a valid email address (e.g. attendee@example.com).')
+      return
+    }
+
     setLoading(true)
 
     try {
       if (isFull) {
-        await api.waitlist.add(workshop.id, { attendeeName, attendeeEmail })
-        setSuccessMsg(`Added ${attendeeName} to the waitlist queue.`)
+        await api.waitlist.add(workshop.id, { attendeeName: cleanName, attendeeEmail: cleanEmail })
+        setSuccessMsg(`Added ${cleanName} to the waitlist queue.`)
       } else {
-        await api.registrations.register(workshop.id, { attendeeName, attendeeEmail })
-        setSuccessMsg(`Registered ${attendeeName} successfully. Seat confirmed.`)
+        await api.registrations.register(workshop.id, { attendeeName: cleanName, attendeeEmail: cleanEmail })
+        setSuccessMsg(`Registered ${cleanName} successfully. Seat confirmed.`)
       }
 
       setTimeout(() => {

@@ -75,10 +75,47 @@ export const WorkshopModal: React.FC<WorkshopModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+
+    if (!formData.code.trim()) {
+      setError('Workshop code is required (e.g. POT-101).')
+      return
+    }
+
+    if (!formData.title.trim()) {
+      setError('Workshop title is required.')
+      return
+    }
+
+    if (!formData.instructor.trim()) {
+      setError('Instructor name is required.')
+      return
+    }
+
+    if (!formData.capacity || formData.capacity < 1) {
+      setError('Workshop capacity must be at least 1 seat.')
+      return
+    }
+
+    if (!formData.startTime) {
+      setError('Please select a workshop start date and time.')
+      return
+    }
+
+    if (formData.endTime && new Date(formData.endTime) <= new Date(formData.startTime)) {
+      setError('End date and time must be after the start date and time.')
+      return
+    }
+
     setLoading(true)
 
     try {
-      await onSubmit(formData)
+      await onSubmit({
+        ...formData,
+        code: formData.code.trim().toUpperCase(),
+        title: formData.title.trim(),
+        instructor: formData.instructor.trim(),
+        description: formData.description?.trim(),
+      })
       onClose()
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to save workshop')

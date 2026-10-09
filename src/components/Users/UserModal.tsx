@@ -28,16 +28,41 @@ export const UserModal: React.FC<UserModalProps> = ({
     e.preventDefault()
     setError(null)
     setSuccessMsg(null)
+
+    const cleanName = name.trim()
+    const cleanEmail = email.trim().toLowerCase()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!cleanName || cleanName.length < 2) {
+      setError('Please provide a full name (at least 2 characters).')
+      return
+    }
+
+    if (!cleanEmail || !emailRegex.test(cleanEmail)) {
+      setError('Please enter a valid email address (e.g. staff@example.com).')
+      return
+    }
+
+    if (!password || password.length < 6) {
+      setError('Password must be at least 6 characters long.')
+      return
+    }
+
+    if (!['ADMIN', 'MANAGER', 'STAFF'].includes(role)) {
+      setError('Please select a valid role.')
+      return
+    }
+
     setLoading(true)
 
     try {
       await api.users.create({
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
+        name: cleanName,
+        email: cleanEmail,
         password,
         role,
       })
-      setSuccessMsg(`Account for ${name} created successfully.`)
+      setSuccessMsg(`Account for ${cleanName} created successfully.`)
 
       setTimeout(() => {
         setName('')

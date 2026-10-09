@@ -12,10 +12,23 @@ export const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+
+    const cleanEmail = email.trim().toLowerCase()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!cleanEmail || !emailRegex.test(cleanEmail)) {
+      setError('Please provide a valid email address.')
+      return
+    }
+
+    if (!password || password.length < 6) {
+      setError('Password must be at least 6 characters.')
+      return
+    }
+
     setLoading(true)
 
     try {
-      await login(email, password)
+      await login(cleanEmail, password)
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Invalid credentials')
     } finally {
@@ -89,7 +102,7 @@ export const Login: React.FC = () => {
               className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             >
               {loading ? (
-                'Signing in...'
+                'Connecting... (waking up server if idle)'
               ) : (
                 <>
                   <LogIn className="w-4 h-4 mr-2" />
@@ -98,6 +111,10 @@ export const Login: React.FC = () => {
               )}
             </button>
           </form>
+
+          <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-md text-xs text-amber-800 leading-relaxed">
+            <span className="font-semibold">Live Server Note:</span> The free Render tier suspends instances during inactivity. The first sign-in may take 30 to 50 seconds to wake up the server.
+          </div>
 
           <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-xs text-gray-500 font-medium mb-2">Dev test accounts:</p>

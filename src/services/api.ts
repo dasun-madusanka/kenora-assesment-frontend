@@ -17,11 +17,24 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   const url = `${BASE_URL}${endpoint}`
   const headers = { ...getHeaders(), ...(options.headers || {}) }
 
-  const response = await fetch(url, { ...options, headers })
+  let response: Response
+  try {
+    response = await fetch(url, { ...options, headers })
+  } catch {
+    throw new Error(
+      'Could not connect to the backend. If using the live Render deployment, the free instance might be waking up from sleep (takes about 30 to 50 seconds). Please retry shortly.'
+    )
+  }
+
   const data = await response.json().catch(() => ({}))
 
   if (!response.ok) {
-    const errorMsg = data.error || data.message || `Request failed with status ${response.status}`
+    let errorMsg = ''
+    if (Array.isArray(data.errors) && data.errors.length > 0) {
+      errorMsg = data.errors.join('. ')
+    } else {
+      errorMsg = data.error || data.message || `Request failed with status ${response.status}`
+    }
     throw new Error(errorMsg)
   }
 

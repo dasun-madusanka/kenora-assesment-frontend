@@ -14,10 +14,17 @@ Create a `.env` file from `.env.example`:
 ```bash
 cp .env.example .env
 ```
-Default config:
+Default config (local):
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
+
+Live backend on Render:
+```env
+VITE_API_URL=https://kenora-assesment-backend.onrender.com/api
+```
+
+> **Note on Render Free Tier**: The live backend is hosted on a free Render instance. Free instances sleep after periods of inactivity and take around 30 to 50 seconds to spin up on the first request. Subsequent requests run at normal speed.
 
 ### 3. Run development server
 ```bash
