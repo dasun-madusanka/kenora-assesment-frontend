@@ -31,7 +31,7 @@ export const WorkshopModal: React.FC<WorkshopModalProps> = ({
     code: '',
     title: '',
     instructor: '',
-    location: 'Downtown Campus',
+    location: '',
     description: '',
     startTime: '',
     endTime: '',
@@ -47,7 +47,7 @@ export const WorkshopModal: React.FC<WorkshopModalProps> = ({
         code: initialData.code,
         title: initialData.title,
         instructor: initialData.instructor,
-        location: initialData.location || 'Downtown Campus',
+        location: initialData.location || '',
         description: initialData.description || '',
         startTime: initialData.start_time ? new Date(initialData.start_time).toISOString().slice(0, 16) : '',
         endTime: initialData.end_time ? new Date(initialData.end_time).toISOString().slice(0, 16) : '',
@@ -59,7 +59,7 @@ export const WorkshopModal: React.FC<WorkshopModalProps> = ({
         code: '',
         title: '',
         instructor: '',
-        location: 'Downtown Campus',
+        location: '',
         description: '',
         startTime: '',
         endTime: '',
@@ -114,6 +114,7 @@ export const WorkshopModal: React.FC<WorkshopModalProps> = ({
         code: formData.code.trim().toUpperCase(),
         title: formData.title.trim(),
         instructor: formData.instructor.trim(),
+        location: formData.location?.trim() || '',
         description: formData.description?.trim(),
       })
       onClose()
@@ -200,15 +201,13 @@ export const WorkshopModal: React.FC<WorkshopModalProps> = ({
 
             <div>
               <label className="block text-xs font-medium text-gray-700">Location</label>
-              <select
+              <input
+                type="text"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500 bg-white"
-              >
-                <option value="Downtown Campus">Downtown Campus</option>
-                <option value="North Hub">North Hub</option>
-                <option value="West End">West End</option>
-              </select>
+                placeholder="e.g. Downtown Campus, Room 102"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+              />
             </div>
           </div>
 
