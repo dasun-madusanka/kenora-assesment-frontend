@@ -30,3 +30,15 @@ The application will start on `http://localhost:3000`.
 npm run build
 ```
 Build output is saved to the `dist/` directory.
+
+---
+
+## Seeded Accounts (Dev Login)
+
+| Role | Email | Password | Allowed Access |
+|---|---|---|---|
+| Admin | kamal@gmail.com | AdminPass123! | Staff accounts and role management |
+| Manager | nuwans@gmail.com | Password123! | Add/edit workshops, registrations, history |
+| Staff | nimalp@gmail.com | Password123! | Workshop catalogue, registrations, history |
+
+Quick-login shortcut buttons are also provided directly on the login page for testing.
